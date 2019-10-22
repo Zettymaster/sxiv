@@ -21,9 +21,11 @@
 #include "config.h"
 
 #include <stdlib.h>
+#define _GNU_SOURCE
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <libgen.h>
 #include <errno.h>
 #include <locale.h>
 #include <signal.h>
@@ -283,6 +285,29 @@ end:
 	win.bar.l.buf[info.i] = '\0';
 	win_draw(&win);
 	close_info();
+}
+
+bool delete_image(int idx)
+{
+	if (idx > filecnt)
+		return false;
+
+	const char *path = files[idx].path;
+	char *dir = strdup(path);
+	dir = dirname(dir);
+
+	if (access(dir, W_OK | X_OK) == 0){
+        if (remove(path) == 0){
+			remove_file(idx, true);
+			free(dir);
+			return true;
+		}
+    }
+    
+	free(dir);
+
+	return false;
+
 }
 
 void load_image(int new)

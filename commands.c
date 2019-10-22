@@ -26,6 +26,7 @@
 #include <sys/wait.h>
 
 void remove_file(int, bool);
+bool delete_image(int);
 void load_image(int);
 bool mark_image(int, bool);
 void close_info(void);
@@ -268,6 +269,12 @@ bool cg_change_gamma(arg_t d)
 	} else {
 		return false;
 	}
+}
+
+// zettymaster
+bool ci_delete(arg_t n)
+{
+	return delete_image(fileidx);
 }
 
 bool ci_navigate(arg_t n)
